@@ -9,13 +9,18 @@ allow hal_neuralnetworks_default self:process execmem;
 
 allow hal_neuralnetworks_default vendor_data_file:file { open read write };
 allow hal_neuralnetworks_default vendor_data_file:dir rw_dir_perms;
+
 set_prop(hal_neuralnetworks_default, vendor_nnhal_prop)
+get_prop(hal_neuralnetworks_default, vendor_nnhal_prop)
 
 # allow hal_neuralnetworks to access libusb
 allow hal_neuralnetworks_default usb_device:dir r_dir_perms;
 allow hal_neuralnetworks_default usb_device:chr_file rw_file_perms;
 
 allow hal_neuralnetworks_default self:netlink_kobject_uevent_socket { read bind create setopt };
+
+# allow hal_neuralnetworks to use vsock
+allow hal_neuralnetworks_default self:vsock_socket { create read write connect getopt setopt };
 
 dontaudit hal_neuralnetworks_default self:capability { dac_read_search dac_override };
 allow hal_neuralnetworks_default sysfs:dir r_dir_perms;
@@ -28,6 +33,7 @@ allow hal_neuralnetworks_default gpu_device:dir { open read search };
 allow hal_neuralnetworks_default gpu_device:chr_file { open read write ioctl getattr map };
 allow hal_neuralnetworks_default sysfs_app_readable:file r_file_perms;
 allow hal_neuralnetworks_default tmpfs:file { read write map };
+allow hal_neuralnetworks_default hal_graphics_allocator_default_tmpfs:file { map read write };
 dontaudit hal_neuralnetworks_default system_file:file r_file_perms;
 dontaudit hal_neuralnetworks_default hal_configstore_ISurfaceFlingerConfigs:hwservice_manager find;
 dontaudit hal_neuralnetworks_default hal_configstore_default:binder call;
